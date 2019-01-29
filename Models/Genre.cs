@@ -14,7 +14,7 @@ namespace OpenMicChicago.Models {
         [MinLength (2)]
         public String Name { get; set; }
 
-        public List<OpenMicGenres> OpenMics { get; set; }
+        public List<OpenMicGenre> OpenMics { get; set; }
 
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;

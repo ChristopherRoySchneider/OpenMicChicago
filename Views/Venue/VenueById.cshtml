@@ -29,6 +29,7 @@
         
         @{if (@Model.Creator.UserID==@Context.Session.GetInt32("UserID"))
         {
+            <a href="/Venue/@Model.VenueID/Edit" class="btn btn-primary btn-block">Edit Venue</a>
             <a href="/Venue/@Model.VenueID/Delete" class="btn btn-primary btn-block">Delete Venue</a>
     
         }}

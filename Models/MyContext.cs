@@ -11,6 +11,8 @@
             public DbSet<Like> Likes {get;set;}
             
             public DbSet<Venue> Venues {get;set;}
+            public DbSet<Genre> Genres {get;set;}
+            public DbSet<OpenMicGenre> OpenMicGenres {get;set;}
             
         }
     }

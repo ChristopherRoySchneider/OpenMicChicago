@@ -2,15 +2,17 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using OpenMicChicago.Models;
 
 namespace OpenMicChicago.Migrations
 {
     [DbContext(typeof(MyContext))]
-    partial class MyContextModelSnapshot : ModelSnapshot
+    [Migration("20190129180149_m2")]
+    partial class m2
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -101,7 +103,7 @@ namespace OpenMicChicago.Migrations
                     b.ToTable("OpenMics");
                 });
 
-            modelBuilder.Entity("OpenMicChicago.Models.OpenMicGenre", b =>
+            modelBuilder.Entity("OpenMicChicago.Models.OpenMicGenres", b =>
                 {
                     b.Property<int>("OpenMicGenreID")
                         .ValueGeneratedOnAdd();
@@ -216,7 +218,7 @@ namespace OpenMicChicago.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("OpenMicChicago.Models.OpenMicGenre", b =>
+            modelBuilder.Entity("OpenMicChicago.Models.OpenMicGenres", b =>
                 {
                     b.HasOne("OpenMicChicago.Models.Genre", "Genre")
                         .WithMany("OpenMics")
