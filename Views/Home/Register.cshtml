@@ -1,0 +1,46 @@
+@{
+    ViewData["Title"] = "Register";
+}
+@model OpenMicChicago.Models.User
+
+<div class="row">
+    <div class="col">
+        <h1>Register</h1>
+
+            <form asp-action="SubmitRegistration" asp-controller="Home" method="post">
+                <div class="form-group">
+                    <span asp-validation-for="FirstName"></span>
+                    <label asp-for="FirstName">First Name: </label>
+                    <input class="form-control" asp-for="FirstName">
+                </div>
+
+                <div class="form-group">
+                    <span asp-validation-for="LastName"></span>
+                    <label asp-for="LastName">Last Name: </label>
+                    <input class="form-control" asp-for="LastName">
+                </div>
+
+                <div class="form-group">
+                    <span asp-validation-for="Email"></span>
+                    <label asp-for="Email">Email Address: </label>
+                    <input class="form-control" asp-for="Email">
+                </div>
+
+                <div class="form-group">
+                    <span asp-validation-for="Password"></span>
+                    <label asp-for="Password">Password: </label>
+                    <input class="form-control" asp-for="Password">
+                </div>
+
+                <div class="form-group">
+                    <span asp-validation-for="ConfirmPassword"></span>
+                    <label asp-for="ConfirmPassword">Confirm Password: </label>
+                    <input class="form-control" asp-for="ConfirmPassword">
+                </div>
+                
+                <button value="Add User" type="submit" class="btn btn-primary btn-block mt-1 mb-3">Submit</button>
+            </form>
+
+
+    </div>
+</div>

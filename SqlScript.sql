@@ -1,0 +1,14 @@
+INSERT INTO `openmicchicago`.`genre` (`Name`) VALUES ('Rock');
+INSERT INTO `openmicchicago`.`genre` (`Name`) VALUES ('Acoustic');
+INSERT INTO `openmicchicago`.`genre` (`Name`) VALUES ('Rap');
+INSERT INTO `openmicchicago`.`genre` (`Name`) VALUES ('Blues');
+INSERT INTO `openmicchicago`.`genre` (`Name`) VALUES ('Hard Rock');
+INSERT INTO `openmicchicago`.`genre` (`Name`) VALUES ('Bluegrass');
+INSERT INTO `openmicchicago`.`genre` (`Name`) VALUES ('Country');
+INSERT INTO `openmicchicago`.`genre` (`Name`) VALUES ('Americana');
+INSERT INTO `openmicchicago`.`genre` (`Name`) VALUES ('Folk');
+INSERT INTO `openmicchicago`.`genre` (`Name`) VALUES ('Indie/Alt');
+INSERT INTO `openmicchicago`.`genre` (`Name`) VALUES ('Hip Hop');
+INSERT INTO `openmicchicago`.`genre` (`Name`) VALUES ('Jazz');
+INSERT INTO `openmicchicago`.`genre` (`Name`) VALUES ('Blues Jam');
+INSERT INTO `openmicchicago`.`genre` (`Name`) VALUES ('Jazz Jam');

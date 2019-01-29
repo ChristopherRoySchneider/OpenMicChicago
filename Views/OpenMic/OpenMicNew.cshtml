@@ -1,0 +1,79 @@
+@{
+    ViewData["Title"] = "New OpenMic";
+}
+@using Microsoft.AspNetCore.Http
+@model OpenMicChicago.Models.OpenMic
+
+<div class = "row">
+    <div class = "col">
+        <h1>Create an OpenMic</h1>
+        <form asp-action="OpenMicNewCreate" asp-controller="OpenMic" method="post">
+
+            
+            <div class="form-group">
+                <span asp-validation-for="Title"></span>
+                <label asp-for="Title">Title:</label>
+                <input class="form-control" asp-for="Title">
+            </div>
+
+            <div class="form-group">
+                <span asp-validation-for="Type"></span>
+                <label asp-for="Type">Type:</label>
+                <input class="form-control" asp-for="Type">
+            </div>
+
+            <div class="form-group">
+                <span asp-validation-for="VenueID"></span>
+                <label asp-for="VenueID">Venue:</label>
+                <select asp-for="VenueID">
+                    @{
+                        foreach (var venue in ViewBag.Venues)
+                        {
+                            <option value="@venue.VenueID">@venue.Name</option>
+                        }
+                    }
+                </select>
+                
+            </div>
+
+            <div class="form-group">
+                <span asp-validation-for="Signup"></span>
+                <label asp-for="Signup">Signup: </label>
+                <input class="form-control" asp-for="Signup" type="datetime-local">
+            </div>
+
+            <div class="form-group">
+                <span asp-validation-for="DateTime"></span>
+                <label asp-for="DateTime">Date: </label>
+                <input class="form-control" asp-for="DateTime" type="datetime-local">
+            </div>
+            
+
+            <div class="form-group">
+                <span asp-validation-for="Duration"></span>
+                <label asp-for="Duration">Duration: </label>
+                <input class="form-control" min="0" asp-for="Duration">
+                <select asp-for="DurationUnit" class="form-control">
+                    <option value="Minutes">Minute(s)</option>
+                    <option value="Hours">Hour(s)</option>
+                    <option value="Days">Day(s)</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <span asp-validation-for="Frequency"></span>
+                <label asp-for="Frequency">Frequency:</label>
+                <input class="form-control" asp-for="Frequency">
+            </div>
+
+            <div class="form-group">
+                <span asp-validation-for="Description"></span>
+                <label asp-for="Description">Description:</label>
+                <textarea asp-for="Description" class="form-control" placeholder = "Enter text here..."></textarea>
+            </div>
+            
+        <button value="Add OpenMic" type="submit" class="btn btn-primary btn-block mt-1 mb-3">Create OpenMic</button>
+    </form>
+        
+    </div>
+</div>

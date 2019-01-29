@@ -1,0 +1,63 @@
+@{
+    ViewData["Title"] = "Home";
+}
+@model IQueryable<OpenMicChicago.Models.OpenMic>
+@using Microsoft.AspNetCore.Http
+
+<div class = "row">
+    <div class = "col">
+        
+        <table class="table table-striped table-bordered  table-hover">
+            <thead class="thead">
+                <tr>
+                    <th>OpenMic</th>
+                    <th>Date and Time</th>
+                    <th>Duration</th>
+                    <th>Event Coordinator</th>
+                    <th>Participants</th>
+                    <th>Actions</th>
+                
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var OpenMic in @Model)
+                        {
+                            <tr>
+                                <td><a href="/OpenMic/@OpenMic.OpenMicID">@OpenMic.Title</a></td>
+                                <td>@OpenMic.DateTime.ToString("yyyy/MM/dd hh:mm tt")</td>
+                                <td>@OpenMic.Duration @OpenMic.DurationUnit</td>
+                                <td>@OpenMic.Creator.FirstName</td>
+                                <td>@OpenMic.Likes.Count</td>
+                                @{
+                                    if (@OpenMic.Creator.UserID== @Context.Session.GetInt32("UserID"))
+                                    {
+                                        <td><a href="/OpenMic/@OpenMic.OpenMicID/Delete">Delete</a></td>
+                                    }
+                                    else if (@OpenMic.Likes.Where(r=>r.UserID==@Context.Session.GetInt32("UserID")).Count()==0 )
+                                    {
+                                        if (@Model.Where(x=>x.DateTime < OpenMic.EndDateTime && OpenMic.DateTime< x.EndDateTime && x.Likes.Where(r=>r.UserID ==@Context.Session.GetInt32("UserID")).Count()>0).Count()>0)
+                                        {
+                                            <td><a href="">Schedule Conflict</a></td>
+                                        }
+                                        else
+                                        {
+                                            <td><a href="/OpenMic/@OpenMic.OpenMicID/Like">Join</a></td>    
+                                        }
+                                        
+                                    }
+                                    else if (@OpenMic.Likes.Where(r=>r.UserID==@Context.Session.GetInt32("UserID")).Count()>0 )
+                                    {
+                                        <td><a href="/OpenMic/@OpenMic.OpenMicID/unLike">Leave</a></td>
+                                    }
+                                }
+                            </tr>
+                            
+                        }
+                }
+                 
+            </tbody>
+        </table>
+        <a href="/OpenMic/new" class = "btn btn-primary">Add New OpenMic</a>
+    </div>
+</div>

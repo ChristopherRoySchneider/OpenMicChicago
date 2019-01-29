@@ -1,0 +1,51 @@
+@{
+    ViewData["Title"] = "OpenMic";
+}
+@model OpenMicChicago.Models.OpenMic
+@using Microsoft.AspNetCore.Http
+@using System.Web
+
+
+<div class = "row">
+    <div class = "col">
+        
+        <h1>@Model.Title</h1>
+        <p>Date: @Model.DateTime.ToString("yyyy/MM/dd hh:mm tt") - @Model.EndDateTime.ToString("yyyy/MM/dd hh:mm tt")</p>
+        <p>Event Coordinator: @Model.Creator.FirstName @Model.Creator.LastName</p>
+        <p>Description:</p>
+        <p class="ml-4">@Model.Description</p>
+        <p>Participants:</p>
+        <ul>
+            @{
+                foreach (var guest in @Model.Likes)
+                    {
+                        <li>@guest.User.FirstName @guest.User.LastName</li>
+                    }
+            }
+        </ul>
+       @{
+            if (@Model.Creator.UserID== @Context.Session.GetInt32("UserID"))
+            {
+                <a class="btn btn-primary btn-block" href="/OpenMic/@Model.OpenMicID/Delete">Delete</a>
+            }
+            else if (@Model.Likes.Where(r=>r.UserID==@Context.Session.GetInt32("UserID")).Count()==0 )
+            {
+                if (ViewBag.scheduleConflict)
+                {
+                    <a class="btn btn-primary btn-block" href="">Schedule Conflict</a>
+                }
+                else
+                {
+                    <a class="btn btn-primary btn-block" href="/OpenMic/@Model.OpenMicID/RSVP">Join</a>
+                
+                }
+                }
+            else if (@Model.Likes.Where(r=>r.UserID==@Context.Session.GetInt32("UserID")).Count()>0 )
+            {
+                <a  class="btn btn-primary btn-block" href="/OpenMic/@Model.OpenMicID/unRSVP">Leave</a>
+            }
+        }
+        
+    </div>
+    
+</div>

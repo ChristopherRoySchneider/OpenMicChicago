@@ -1,0 +1,37 @@
+@{
+    ViewData["Title"] = "Venue";
+}
+@model OpenMicChicago.Models.Venue
+@using Microsoft.AspNetCore.Http
+@using System.Web
+
+
+<div class = "row">
+    <div class = "col">
+        
+        <h1>@Model.Name</h1>
+        
+        <p>Venue Owner: @Model.Creator.FirstName @Model.Creator.LastName</p>
+        
+        <p>Events:</p>
+        <ul>
+            @{
+                foreach (var occasion in @Model.OpenMics)
+                    {
+                        <li>@occasion.Title - @occasion.DateTime</li>
+                    }
+            }
+        </ul>
+    @{
+            var urlAddress=HttpUtility.UrlEncode($"{@Model.StreetAndNumber} {@Model.Unit} {@Model.City} {@Model.State} {@Model.ZipCode}"); 
+        }
+        <iframe class="w-100 h-100 border border-primary" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBcbGOQQ4Zk3sFgmqmGCEA-H_r7tnlglwk&q=@urlAddress" allowfullscreen></iframe>
+        
+        @{if (@Model.Creator.UserID==@Context.Session.GetInt32("UserID"))
+        {
+            <a href="/Venue/@Model.VenueID/Delete" class="btn btn-primary btn-block">Delete Venue</a>
+    
+        }}
+        </div>
+    
+</div>

@@ -1,0 +1,40 @@
+@{
+    ViewData["Title"] = "Home";
+}
+@model IQueryable<OpenMicChicago.Models.Venue>
+@using Microsoft.AspNetCore.Http
+
+<div class = "row">
+    <div class = "col">
+        
+        <table class="table table-striped table-bordered  table-hover">
+            <thead class="thead">
+                <tr>
+                    <th>Name</th>
+                    <th>Address</th>
+                    <th>Phone Number</th>
+                    <th>Website</th>
+                    
+                
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    foreach (var Venue in @Model)
+                        {
+                            <tr>
+                                <td><a href="/Venue/@Venue.VenueID">@Venue.Name</a></td>
+                                <td>@Venue.StreetAndNumber</td>
+                                <td>@Venue.PhoneNumber</td>
+                                <td><a href="@Venue.Website" target="_blank">@Venue.Website</a></td>
+                                
+                            </tr>
+                            
+                        }
+                }
+                 
+            </tbody>
+        </table>
+        <a href="/Venue/new" class = "btn btn-primary">Add New Venue</a>
+    </div>
+</div>
