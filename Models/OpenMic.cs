@@ -74,7 +74,7 @@ namespace OpenMicChicago.Models {
 
         public string PhotoURL { get; set; }
 
-        public List<OpenMicGenres> Genres { get; set; }
+        public List<OpenMicGenre> Genres { get; set; }
 
     }
 

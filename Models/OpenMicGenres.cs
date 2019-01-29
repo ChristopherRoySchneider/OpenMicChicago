@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OpenMicChicago.Models {
-    public class OpenMicGenres {
+    public class OpenMicGenre {
         [Key]
         public int OpenMicGenreID { get; set; }
 

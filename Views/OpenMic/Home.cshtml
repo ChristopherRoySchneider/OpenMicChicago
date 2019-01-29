@@ -12,7 +12,7 @@
                 <tr>
                     <th>OpenMic</th>
                     <th>Date and Time</th>
-                    <th>Duration</th>
+                    
                     <th>Event Coordinator</th>
                     <th>Participants</th>
                     <th>Actions</th>
@@ -25,8 +25,8 @@
                         {
                             <tr>
                                 <td><a href="/OpenMic/@OpenMic.OpenMicID">@OpenMic.Title</a></td>
-                                <td>@OpenMic.DateTime.ToString("yyyy/MM/dd hh:mm tt")</td>
-                                <td>@OpenMic.Duration @OpenMic.DurationUnit</td>
+                                <td>@OpenMic.DateTime.ToString("yyyy/MM/dd hh:mm tt") - @OpenMic.EndDateTime.ToString("yyyy/MM/dd hh:mm tt")</td>
+                                
                                 <td>@OpenMic.Creator.FirstName</td>
                                 <td>@OpenMic.Likes.Count</td>
                                 @{

@@ -44,7 +44,7 @@ namespace OpenMicChicago.Models {
 
         public List<OpenMic> OpenMics { get; set; }
         public List<Venue> Venues { get; set; }
-        public List<Like> RSVPs { get; set; }
+        public List<Like> Likes { get; set; }
 
         public string PhotoURL { get; set; }
 

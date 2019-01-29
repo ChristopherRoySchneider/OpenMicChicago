@@ -23,9 +23,50 @@
                     }
             }
         </ul>
+        <p>Genres:</p>
+        <ul>
+            @{
+                foreach (var omg in @Model.Genres.OrderBy(omg=>omg.Genre.Name))
+                    {
+                        if(@Model.Creator.UserID== @Context.Session.GetInt32("UserID")){
+                            <li>@omg.Genre.Name <a href="/OpenMic/@omg.OpenMicID/RemoveGenre/@omg.GenreID">Remove</a></li>
+                        }
+                        else
+                        {
+                            <li>@omg.Genre.Name </li>
+
+                        }
+                    }
+            }
+        </ul>
+        
        @{
             if (@Model.Creator.UserID== @Context.Session.GetInt32("UserID"))
             {
+                
+
+                <form action="/OpenMic/@Model.OpenMicID/AddGenre"  method="post">
+                    <input type="hidden" asp-for="OpenMicID" value="@Model.OpenMicID">
+            
+            
+            <div class="form-group">
+                
+                <label for="genreID">Add Genre:</label>
+                <select name="genreID">
+                    @{
+                        foreach (var genre in ViewBag.UnusedGenres)
+                        {
+                            <option value="@genre.GenreID">@genre.Name</option>
+                        }
+                    }
+                </select>
+                
+            </div>
+
+            
+        <button value="Add OpenMic" type="submit" class="btn btn-primary  mt-1 mb-3">Add Genre</button>
+    </form>
+                
                 <a class="btn btn-primary btn-block" href="/OpenMic/@Model.OpenMicID/Delete">Delete</a>
             }
             else if (@Model.Likes.Where(r=>r.UserID==@Context.Session.GetInt32("UserID")).Count()==0 )
@@ -36,13 +77,13 @@
                 }
                 else
                 {
-                    <a class="btn btn-primary btn-block" href="/OpenMic/@Model.OpenMicID/RSVP">Join</a>
+                    <a class="btn btn-primary btn-block" href="/OpenMic/@Model.OpenMicID/Like">Join</a>
                 
                 }
                 }
             else if (@Model.Likes.Where(r=>r.UserID==@Context.Session.GetInt32("UserID")).Count()>0 )
             {
-                <a  class="btn btn-primary btn-block" href="/OpenMic/@Model.OpenMicID/unRSVP">Leave</a>
+                <a  class="btn btn-primary btn-block" href="/OpenMic/@Model.OpenMicID/unLike">Leave</a>
             }
         }
         
