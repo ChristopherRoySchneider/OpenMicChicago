@@ -12,6 +12,7 @@
         <h1>@Model.Title</h1>
         <p>Date: @Model.DateTime.ToString("yyyy/MM/dd hh:mm tt") - @Model.EndDateTime.ToString("yyyy/MM/dd hh:mm tt")</p>
         <p>Event Coordinator: @Model.Creator.FirstName @Model.Creator.LastName</p>
+        <p>Venue: <a href="/Venue/@Model.Venue.VenueID">@Model.Venue.Name</a></p>
         <p>Description:</p>
         <p class="ml-4">@Model.Description</p>
         <p>Participants:</p>
@@ -40,34 +41,30 @@
             }
         </ul>
         
-       @{
+        @{
             if (@Model.Creator.UserID== @Context.Session.GetInt32("UserID"))
             {
-                
-
                 <form action="/OpenMic/@Model.OpenMicID/AddGenre"  method="post">
                     <input type="hidden" asp-for="OpenMicID" value="@Model.OpenMicID">
-            
-            
-            <div class="form-group">
+                    <div class="form-group">
                 
-                <label for="genreID">Add Genre:</label>
-                <select name="genreID">
-                    @{
-                        foreach (var genre in ViewBag.UnusedGenres)
-                        {
-                            <option value="@genre.GenreID">@genre.Name</option>
-                        }
-                    }
-                </select>
+                        <label for="genreID">Add Genre:</label>
+                        <select name="genreID">
+                            @{
+                                foreach (var genre in ViewBag.UnusedGenres)
+                                {
+                                    <option value="@genre.GenreID">@genre.Name</option>
+                                }
+                            }
+                        </select>
+                    </div>
+                    <button value="Add OpenMic" type="submit" class="btn btn-primary  mt-1 mb-3">Add Genre</button>
+                </form>
                 
-            </div>
-
-            
-        <button value="Add OpenMic" type="submit" class="btn btn-primary  mt-1 mb-3">Add Genre</button>
-    </form>
-                
+                <a class="btn btn-primary btn-block" href="/OpenMic/@Model.OpenMicID/Edit">Edit</a>
                 <a class="btn btn-primary btn-block" href="/OpenMic/@Model.OpenMicID/Delete">Delete</a>
+                
+                
             }
             else if (@Model.Likes.Where(r=>r.UserID==@Context.Session.GetInt32("UserID")).Count()==0 )
             {

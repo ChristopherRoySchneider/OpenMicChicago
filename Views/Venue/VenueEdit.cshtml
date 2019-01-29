@@ -1,0 +1,63 @@
+@{
+    ViewData["Title"] = "Edit OpenMic";
+}
+@using Microsoft.AspNetCore.Http
+@model OpenMicChicago.Models.Venue
+
+<div class = "row">
+    <div class = "col">
+        <h1>Update Venue</h1>
+        <form asp-action="VenueUpdate" asp-controller="Venue" method="post">
+
+            
+            <div class="form-group">
+                <span asp-validation-for="Name"></span>
+                <label asp-for="Name">Name:</label>
+                <input class="form-control" asp-for="Name">
+            </div>
+
+            <div class="form-group">
+                <span asp-validation-for="StreetAndNumber"></span>
+                <label asp-for="StreetAndNumber" >Address:</label>
+                <input class="form-control" placeholder = "Street and number, P.O. Box, c/o" asp-for="StreetAndNumber">
+            </div>
+            <div class="form-group">
+                <span asp-validation-for="Unit"></span>
+                
+                <input class="form-control" placeholder = "Apartment, suite, unit, building, floor, etc." asp-for="Unit">
+            </div>
+
+            <div class="form-group">
+                <span asp-validation-for="City"></span>
+                <label asp-for="City">City:</label>
+                <input class="form-control" asp-for="City">
+            </div>
+
+            <div class="form-group">
+                <span asp-validation-for="State"></span>
+                <label asp-for="State">State:</label>
+                <input class="form-control" asp-for="State">
+            </div>
+
+            <div class="form-group">
+                <span asp-validation-for="ZipCode"></span>
+                <label asp-for="ZipCode">Zip Code:</label>
+                <input class="form-control" asp-for="ZipCode">
+            </div>
+            <div class="form-group">
+                <span asp-validation-for="PhoneNumber"></span>
+                <label asp-for="PhoneNumber">Phone Number:</label>
+                <input class="form-control" asp-for="PhoneNumber">
+            </div>
+            <div class="form-group">
+                <span asp-validation-for="Website"></span>
+                <label asp-for="Website">Website:</label>
+                <input class="form-control" asp-for="Website">
+            </div>
+
+            
+        <button value="Add OpenMic" type="submit" class="btn btn-primary btn-block mt-1 mb-3">Update Venue</button>
+    </form>
+        
+    </div>
+</div>

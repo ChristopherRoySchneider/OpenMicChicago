@@ -18,13 +18,18 @@
             @{
                 foreach (var occasion in @Model.OpenMics)
                     {
-                        <li>@occasion.Title - @occasion.DateTime</li>
+                        <li><a href="/OpenMic/@occasion.OpenMicID">@occasion.Title - @occasion.DateTime</a> </li>
                     }
             }
         </ul>
-    @{
-            var urlAddress=HttpUtility.UrlEncode($"{@Model.StreetAndNumber} {@Model.Unit} {@Model.City} {@Model.State} {@Model.ZipCode}"); 
+        @{
+            var address = $"{@Model.StreetAndNumber} {@Model.Unit} {@Model.City} {@Model.State} {@Model.ZipCode}";
+            var urlAddress=HttpUtility.UrlEncode(address); 
         }
+        <p>Website: <a target="_blank" href="@Model.Website">@Model.Website</a> </p>
+        <p>Address: @address</p>
+        <p>phone: @Model.PhoneNumber</p>
+        
         <iframe class="w-100 h-100 border border-primary" src="https://www.google.com/maps/embed/v1/place?key=AIzaSyBcbGOQQ4Zk3sFgmqmGCEA-H_r7tnlglwk&q=@urlAddress" allowfullscreen></iframe>
         
         @{if (@Model.Creator.UserID==@Context.Session.GetInt32("UserID"))

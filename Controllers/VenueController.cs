@@ -99,6 +99,44 @@ namespace OpenMicChicago.Controllers {
             return View ("VenueById",venue);
         }
 
+        [HttpGet]
+        [Route ("Venue/{venueID}/Edit")]
+        public IActionResult VenueEdit (int venueID) {
+            
+            if (HttpContext.Session.GetInt32 ("UserID")==null)
+            {
+                return RedirectToAction ("Login","Home");
+            }
+
+            var venue = dbContext.Venues.Include(a=>a.Creator).Include(v=>v.OpenMics).FirstOrDefault(a=>a.VenueID==venueID);
+            if (venue.Creator.UserID!=HttpContext.Session.GetInt32 ("UserID"))
+            {
+                return RedirectToAction ("VenueById",venueID);
+            }
+            
+
+            return View ("VenueEdit",venue);
+        }
+
+        [HttpPost]
+        [Route("/Venue/{venueID}/Update")]
+        public IActionResult VenueUpdate(Venue venue, int venueID){
+            if (HttpContext.Session.GetInt32 ("UserID")==null)
+            {
+                return RedirectToAction ("Login","Home");
+            }
+            if (ModelState.IsValid)
+            {
+                venue.VenueID=venueID;
+
+                venue.Creator=dbContext.Users.FirstOrDefault(u=>u.UserID==(int)HttpContext.Session.GetInt32("UserID"));
+                dbContext.Venues.Update(venue);
+                dbContext.SaveChanges();
+                return RedirectToAction ("VenueById",venueID);
+            }
+            return View("VenueEdit",venue);
+            
+        }
         
     }
 
