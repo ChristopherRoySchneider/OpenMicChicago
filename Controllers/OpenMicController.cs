@@ -115,7 +115,7 @@ namespace OpenMicChicago.Controllers {
             if (HttpContext.Session.GetInt32 ("UserID") == null) {
                 return RedirectToAction ("Login", "Home");
             }
-            var openMic = dbContext.OpenMics.Include (o => o.Genres).ThenInclude (omg => omg.Genre).Include (a => a.Likes).ThenInclude (r => r.User).Include (a => a.Creator).FirstOrDefault (a => a.OpenMicID == openMicID);
+            var openMic = dbContext.OpenMics.Include (o => o.Genres).ThenInclude (omg => omg.Genre).Include (a => a.Likes).ThenInclude (r => r.User).Include (a => a.Creator).Include(o=>o.Venue).FirstOrDefault (a => a.OpenMicID == openMicID);
             ViewBag.UnusedGenres = dbContext.Genres.Include (g => g.OpenMics).Where (g => g.OpenMics.All (omg => omg.OpenMicID != openMicID)).OrderBy(g=>g.Name);
             var openMics = dbContext.OpenMics.Include (a => a.Likes).ThenInclude (r => r.User).Include (a => a.Creator).OrderBy (a => a.DateTime).Where (a => a.DateTime > DateTime.Now);
             if (openMics.Where (x => x.DateTime < openMic.EndDateTime && openMic.DateTime < x.EndDateTime && x.Likes.Where (r => r.UserID == HttpContext.Session.GetInt32 ("UserID")).Count () > 0).Count () > 0) {
@@ -154,6 +154,47 @@ namespace OpenMicChicago.Controllers {
             dbContext.Remove (omg);
             dbContext.SaveChanges ();
             return RedirectToAction ("OpenMicByID", openMicID);
+        }
+
+        [HttpGet]
+        [Route ("OpenMic/{openMicID}/Edit")]
+        public IActionResult OpenMicEdit (int openMicID) {
+            
+            if (HttpContext.Session.GetInt32 ("UserID")==null)
+            {
+                return RedirectToAction ("Login","Home");
+            }
+            viewBagVenues();
+            var openMic = dbContext.OpenMics.Include(a=>a.Creator).Include(v=>v.Venue).FirstOrDefault(a=>a.OpenMicID==openMicID);
+            if (openMic.Creator.UserID!=HttpContext.Session.GetInt32 ("UserID"))
+            {
+                return RedirectToAction ("OpenMicById",openMicID);
+            }
+            
+
+            return View ("OpenMicEdit",openMic);
+        }
+
+
+        [HttpPost]
+        [Route("/OpenMic/{openMicID}/Update")]
+        public IActionResult OpenMicUpdate(OpenMic openMic, int openMicID){
+            if (HttpContext.Session.GetInt32 ("UserID")==null)
+            {
+                return RedirectToAction ("Login","Home");
+            }
+            viewBagVenues();
+            if (ModelState.IsValid)
+            {
+                openMic.OpenMicID=openMicID;
+
+                openMic.Creator=dbContext.Users.FirstOrDefault(u=>u.UserID==(int)HttpContext.Session.GetInt32("UserID"));
+                dbContext.OpenMics.Update(openMic);
+                dbContext.SaveChanges();
+                return RedirectToAction ("OpenMicById",openMicID);
+            }
+            return View("OpenMicEdit",openMic);
+            
         }
 
     }
