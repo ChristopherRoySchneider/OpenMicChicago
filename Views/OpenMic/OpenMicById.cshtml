@@ -10,6 +10,7 @@
     <div class = "col">
         
         <h1>@Model.Title</h1>
+        <p>Type: @Model.Type</p>
         <p>Date: @Model.DateTime.ToString("yyyy/MM/dd hh:mm tt") - @Model.EndDateTime.ToString("yyyy/MM/dd hh:mm tt")</p>
         <p>Event Coordinator: @Model.Creator.FirstName @Model.Creator.LastName</p>
         <p>Venue: <a href="/Venue/@Model.Venue.VenueID">@Model.Venue.Name</a></p>

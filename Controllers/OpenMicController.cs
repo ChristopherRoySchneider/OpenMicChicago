@@ -25,9 +25,31 @@ namespace OpenMicChicago.Controllers {
 
         [HttpGet]
         [Route ("Home")]
-        public IActionResult Home () {
+        public IActionResult Home (string searchString, DateTime searchTime, int? searchGenre,string searchType) {
+            
+            ViewBag.Genres = dbContext.Genres.Include (g => g.OpenMics).OrderBy(g=>g.Name);
+            
+            var openMics = dbContext.OpenMics.Include (o => o.Likes).ThenInclude (r => r.User).Include (o => o.Creator).Include(o=>o.Genres).ThenInclude(omg=>omg.Genre).OrderBy (o => o.DateTime).Where (o => o.DateTime > DateTime.Now);
+            if (!String.IsNullOrEmpty(searchString)){
+                ViewBag.searchString=searchString;
+                openMics=openMics.Where(o=>o.Title.Contains(searchString) || o.Venue.Name.Contains(searchString) || o.Description.Contains(searchString));
+            }
+            if (searchTime!=DateTime.MinValue)
+            {
+                ViewBag.searchTime=searchTime.ToString("yyyy-MM-ddTHH:mm");
+                openMics=openMics.Where(o=>o.DateTime<searchTime && o.EndDateTime>searchTime);
+            }
+            if (searchGenre.HasValue)
+            {
+                ViewBag.searchGenre=searchGenre;
+                openMics=openMics.Where(o=>o.Genres.Exists(omg=>omg.GenreID==(int)searchGenre));
+            }
+            if (!String.IsNullOrEmpty(searchType)){
+                ViewBag.searchType=searchType;
+                openMics=openMics.Where(o=>o.Type.Contains(searchType));
+            }
 
-            var openMics = dbContext.OpenMics.Include (a => a.Likes).ThenInclude (r => r.User).Include (a => a.Creator).OrderBy (a => a.DateTime).Where (a => a.DateTime > DateTime.Now);
+
             return View ("Home", openMics);
         }
 

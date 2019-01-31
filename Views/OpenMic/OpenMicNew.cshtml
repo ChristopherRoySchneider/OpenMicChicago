@@ -19,7 +19,10 @@
             <div class="form-group">
                 <span asp-validation-for="Type"></span>
                 <label asp-for="Type">Type:</label>
-                <input class="form-control" asp-for="Type">
+                <select asp-for="Type">
+                    <option value="Music">Music</option>
+                    <option value="Improv">Improv</option>
+                </select>
             </div>
 
             <div class="form-group">
