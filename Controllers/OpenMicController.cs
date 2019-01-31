@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using OpenMicChicago.Helpers;
 using OpenMicChicago.Models;
 
 namespace OpenMicChicago.Controllers {
@@ -20,33 +21,53 @@ namespace OpenMicChicago.Controllers {
             get { return dbContext.Users.FirstOrDefault (u => u.UserID == HttpContext.Session.GetInt32 ("UserID")); }
         }
         private void viewBagVenues () {
-            ViewBag.Venues = dbContext.Venues.OrderBy(v=>v.Name);
+            ViewBag.Venues = dbContext.Venues.OrderBy (v => v.Name);
         }
 
         [HttpGet]
         [Route ("Home")]
-        public IActionResult Home (string searchString, DateTime searchTime, int? searchGenre,string searchType) {
-            
-            ViewBag.Genres = dbContext.Genres.Include (g => g.OpenMics).OrderBy(g=>g.Name);
-            
-            var openMics = dbContext.OpenMics.Include (o => o.Likes).ThenInclude (r => r.User).Include (o => o.Creator).Include(o=>o.Genres).ThenInclude(omg=>omg.Genre).OrderBy (o => o.DateTime).Where (o => o.DateTime > DateTime.Now);
-            if (!String.IsNullOrEmpty(searchString)){
-                ViewBag.searchString=searchString;
-                openMics=openMics.Where(o=>o.Title.Contains(searchString) || o.Venue.Name.Contains(searchString) || o.Description.Contains(searchString));
+        public IActionResult Home (string searchString, DateTime searchTime, int? searchGenre, string searchType, string searchAddress, int? searchDistance) {
+
+            ViewBag.Genres = dbContext.Genres.Include (g => g.OpenMics).OrderBy (g => g.Name);
+
+            var openMics = dbContext.OpenMics.Include(o=>o.Venue).Include (o => o.Likes).ThenInclude (r => r.User).Include (o => o.Creator).Include (o => o.Genres).ThenInclude (omg => omg.Genre).OrderBy (o => o.DateTime).Where (o => o.DateTime > DateTime.Now);
+            if (!String.IsNullOrEmpty (searchString)) {
+                ViewBag.searchString = searchString;
+                openMics = openMics.Where (o => o.Title.Contains (searchString) || o.Venue.Name.Contains (searchString) || o.Description.Contains (searchString));
             }
-            if (searchTime!=DateTime.MinValue)
-            {
-                ViewBag.searchTime=searchTime.ToString("yyyy-MM-ddTHH:mm");
-                openMics=openMics.Where(o=>o.DateTime<searchTime && o.EndDateTime>searchTime);
+            if (searchTime != DateTime.MinValue) {
+                ViewBag.searchTime = searchTime.ToString ("yyyy-MM-ddTHH:mm");
+                openMics = openMics.Where (o => o.DateTime < searchTime && o.EndDateTime > searchTime);
             }
-            if (searchGenre.HasValue)
-            {
-                ViewBag.searchGenre=searchGenre;
-                openMics=openMics.Where(o=>o.Genres.Exists(omg=>omg.GenreID==(int)searchGenre));
+            if (searchGenre.HasValue) {
+                ViewBag.searchGenre = searchGenre;
+                openMics = openMics.Where (o => o.Genres.Exists (omg => omg.GenreID == (int) searchGenre));
             }
-            if (!String.IsNullOrEmpty(searchType)){
-                ViewBag.searchType=searchType;
-                openMics=openMics.Where(o=>o.Type.Contains(searchType));
+            if (!String.IsNullOrEmpty (searchType)) {
+                ViewBag.searchType = searchType;
+                openMics = openMics.Where (o => o.Type.Contains (searchType));
+            }
+
+            if (!String.IsNullOrEmpty (searchAddress)) {
+                ViewBag.searchAddress = searchAddress;
+
+            }
+            if (searchDistance.HasValue) {
+                ViewBag.searchDistance = searchDistance;
+
+            }
+            if (!String.IsNullOrEmpty (searchAddress) && searchDistance.HasValue) {
+                double latitude, longitude;
+                Helpers.HelperClass.getLatLong (searchAddress, out latitude, out longitude);
+                var center = new Coordinates (latitude, longitude);
+                
+                foreach (var om in openMics) {
+                    if (center.DistanceTo (new Coordinates (om.Venue.Latitude, om.Venue.Longitude)) > searchDistance) {
+                        System.Console.WriteLine($"greater than {searchDistance} mi");
+                        openMics=openMics.Where(o=>o.OpenMicID!=om.OpenMicID);
+                        
+                    }
+                }
             }
 
 
@@ -137,8 +158,8 @@ namespace OpenMicChicago.Controllers {
             if (HttpContext.Session.GetInt32 ("UserID") == null) {
                 return RedirectToAction ("Login", "Home");
             }
-            var openMic = dbContext.OpenMics.Include (o => o.Genres).ThenInclude (omg => omg.Genre).Include (a => a.Likes).ThenInclude (r => r.User).Include (a => a.Creator).Include(o=>o.Venue).FirstOrDefault (a => a.OpenMicID == openMicID);
-            ViewBag.UnusedGenres = dbContext.Genres.Include (g => g.OpenMics).Where (g => g.OpenMics.All (omg => omg.OpenMicID != openMicID)).OrderBy(g=>g.Name);
+            var openMic = dbContext.OpenMics.Include (o => o.Genres).ThenInclude (omg => omg.Genre).Include (a => a.Likes).ThenInclude (r => r.User).Include (a => a.Creator).Include (o => o.Venue).FirstOrDefault (a => a.OpenMicID == openMicID);
+            ViewBag.UnusedGenres = dbContext.Genres.Include (g => g.OpenMics).Where (g => g.OpenMics.All (omg => omg.OpenMicID != openMicID)).OrderBy (g => g.Name);
             var openMics = dbContext.OpenMics.Include (a => a.Likes).ThenInclude (r => r.User).Include (a => a.Creator).OrderBy (a => a.DateTime).Where (a => a.DateTime > DateTime.Now);
             if (openMics.Where (x => x.DateTime < openMic.EndDateTime && openMic.DateTime < x.EndDateTime && x.Likes.Where (r => r.UserID == HttpContext.Session.GetInt32 ("UserID")).Count () > 0).Count () > 0) {
                 ViewBag.scheduleConflict = true;
@@ -181,42 +202,36 @@ namespace OpenMicChicago.Controllers {
         [HttpGet]
         [Route ("OpenMic/{openMicID}/Edit")]
         public IActionResult OpenMicEdit (int openMicID) {
-            
-            if (HttpContext.Session.GetInt32 ("UserID")==null)
-            {
-                return RedirectToAction ("Login","Home");
-            }
-            viewBagVenues();
-            var openMic = dbContext.OpenMics.Include(a=>a.Creator).Include(v=>v.Venue).FirstOrDefault(a=>a.OpenMicID==openMicID);
-            if (openMic.Creator.UserID!=HttpContext.Session.GetInt32 ("UserID"))
-            {
-                return RedirectToAction ("OpenMicById",openMicID);
-            }
-            
 
-            return View ("OpenMicEdit",openMic);
+            if (HttpContext.Session.GetInt32 ("UserID") == null) {
+                return RedirectToAction ("Login", "Home");
+            }
+            viewBagVenues ();
+            var openMic = dbContext.OpenMics.Include (a => a.Creator).Include (v => v.Venue).FirstOrDefault (a => a.OpenMicID == openMicID);
+            if (openMic.Creator.UserID != HttpContext.Session.GetInt32 ("UserID")) {
+                return RedirectToAction ("OpenMicById", openMicID);
+            }
+
+            return View ("OpenMicEdit", openMic);
         }
 
-
         [HttpPost]
-        [Route("/OpenMic/{openMicID}/Update")]
-        public IActionResult OpenMicUpdate(OpenMic openMic, int openMicID){
-            if (HttpContext.Session.GetInt32 ("UserID")==null)
-            {
-                return RedirectToAction ("Login","Home");
+        [Route ("/OpenMic/{openMicID}/Update")]
+        public IActionResult OpenMicUpdate (OpenMic openMic, int openMicID) {
+            if (HttpContext.Session.GetInt32 ("UserID") == null) {
+                return RedirectToAction ("Login", "Home");
             }
-            viewBagVenues();
-            if (ModelState.IsValid)
-            {
-                openMic.OpenMicID=openMicID;
+            viewBagVenues ();
+            if (ModelState.IsValid) {
+                openMic.OpenMicID = openMicID;
 
-                openMic.Creator=dbContext.Users.FirstOrDefault(u=>u.UserID==(int)HttpContext.Session.GetInt32("UserID"));
-                dbContext.OpenMics.Update(openMic);
-                dbContext.SaveChanges();
-                return RedirectToAction ("OpenMicById",openMicID);
+                openMic.Creator = dbContext.Users.FirstOrDefault (u => u.UserID == (int) HttpContext.Session.GetInt32 ("UserID"));
+                dbContext.OpenMics.Update (openMic);
+                dbContext.SaveChanges ();
+                return RedirectToAction ("OpenMicById", openMicID);
             }
-            return View("OpenMicEdit",openMic);
-            
+            return View ("OpenMicEdit", openMic);
+
         }
 
     }

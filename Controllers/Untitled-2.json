@@ -1,0 +1,70 @@
+{
+    "authenticationResultCode": "ValidCredentials",
+    "brandLogoUri": "http:\/\/dev.virtualearth.net\/Branding\/logo_powered_by.png",
+    "copyright": "Copyright © 2019 Microsoft and its suppliers. All rights reserved. This API cannot be accessed and the content and any results may not be used, reproduced or transmitted in any manner without express written permission from Microsoft Corporation.",
+    "resourceSets": [
+        {
+            "estimatedTotal": 1,
+            "resources": [
+                {
+                    "__type": "Location:http:\/\/schemas.microsoft.com\/search\/local\/ws\/rest\/v1",
+                    "bbox": [
+                        41.8778272824293,
+                        -87.6405271341399,
+                        41.8855527175707,
+                        -87.6266928658601
+                    ],
+                    "name": "181 W Madison St, Chicago, IL 60602",
+                    "point": {
+                        "type": "Point",
+                        "coordinates": [
+                            41.88169,
+                            -87.63361
+                        ]
+                    },
+                    "address": {
+                        "addressLine": "181 W Madison St",
+                        "adminDistrict": "IL",
+                        "adminDistrict2": "Cook County",
+                        "countryRegion": "United States",
+                        "formattedAddress": "181 W Madison St, Chicago, IL 60602",
+                        "locality": "Chicago",
+                        "postalCode": "60602"
+                    },
+                    "confidence": "High",
+                    "entityType": "Address",
+                    "geocodePoints": [
+                        {
+                            "type": "Point",
+                            "coordinates": [
+                                41.88169,
+                                -87.63361
+                            ],
+                            "calculationMethod": "Rooftop",
+                            "usageTypes": [
+                                "Display"
+                            ]
+                        },
+                        {
+                            "type": "Point",
+                            "coordinates": [
+                                41.881952523736,
+                                -87.6336155312248
+                            ],
+                            "calculationMethod": "Rooftop",
+                            "usageTypes": [
+                                "Route"
+                            ]
+                        }
+                    ],
+                    "matchCodes": [
+                        "Good"
+                    ]
+                }
+            ]
+        }
+    ],
+    "statusCode": 200,
+    "statusDescription": "OK",
+    "traceId": "a1bd643340664baf9d56447529d9d7c7|CH12DEF82C|7.7.0.0|Ref A: 209CDF76A04D4C90862939AEF78CA751 Ref B: CH1EDGE0113 Ref C: 2019-01-31T16:51:19Z"
+}
