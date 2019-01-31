@@ -37,6 +37,12 @@ namespace OpenMicChicago.Models {
         
         public String ZipCode { get; set; }
 
+        [NotMapped]
+        public String Address{
+            get{ return $"{this.StreetAndNumber} {this.Unit}, {this.City}, {this.State} {this.ZipCode}";}
+            protected set { }
+        }
+
         [Required]
         
         public String PhoneNumber { get; set; }
@@ -52,6 +58,9 @@ namespace OpenMicChicago.Models {
         public List<OpenMic> OpenMics { get; set; }
 
         public string PhotoURL { get; set; }
+
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
 
     }
 
