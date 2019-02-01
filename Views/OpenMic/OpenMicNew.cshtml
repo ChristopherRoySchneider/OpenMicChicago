@@ -19,7 +19,7 @@
             <div class="form-group">
                 <span asp-validation-for="Type"></span>
                 <label asp-for="Type">Type:</label>
-                <select asp-for="Type">
+                <select class="form-control" asp-for="Type">
                     <option value="Music">Music</option>
                     <option value="StandUp">Stand-Up Comedy</option>
                     <option value="Poetry">Poetry</option>
@@ -29,7 +29,7 @@
             <div class="form-group">
                 <span asp-validation-for="VenueID"></span>
                 <label asp-for="VenueID">Venue:</label>
-                <select asp-for="VenueID">
+                <select class="form-control" asp-for="VenueID">
                     @{
                         foreach (var venue in ViewBag.Venues)
                         {

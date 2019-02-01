@@ -1,56 +1,30 @@
 @using Microsoft.AspNetCore.Http
+
 <!DOCTYPE html>
 <html lang="EN">
 <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - OpenMicChicago</title>
-    
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
-    
-    <link rel="stylesheet" href="~/css/site.css" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>@ViewData["Title"]</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
+  <link rel="stylesheet" href="~/css/site.css" />
+  <link href="https://fonts.googleapis.com/css?family=Roboto" rel="stylesheet">
 </head>
 <body>
-    <div class="container ">
-        @{
-            if (@Context.Session.GetString("UserName")==null)
-            {
-                <header>
-                <nav class = "navbar navbar-dark bg-dark ">
-                    
-                    <a class="navbar-brand  nav-item text-light mr-auto" href="/Home">Open Mic Chicago</a>
-                    <a class="nav-link nav-item  text-light" href = "/Login">Login</a> 
-                    <a class="nav-link nav-item  text-light" href = "/Register">Register</a> 
-                </nav> 
-
-                </header>
-            }
-            else
-            {
-                <header>
-                <nav class = "navbar navbar-dark bg-dark mb-2">
-                    
-                    <a class="navbar-brand  nav-item text-light mr-auto" href="/Home">Open Mic Chicago</a>
-                    <a class="nav-link nav-item  text-light" href = "/Venues">Venues</a> 
-                    <a class="nav-link nav-item disabled text-light" href = "#">Welcome @Context.Session.GetString("UserName")</a> 
-                    
-                    <a class="nav-link nav-item  text-light" href = "/logout">Log Off</a> 
-                </nav> 
-
-                </header>
-            }
+  <div class="container-fluid">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow py-0 fixed-top">
+      <a class="navbar-brand text-dark brand mr-auto" href="/Home">open mic CHICAGO</a>
+      @{
+        if (@Context.Session.GetString("UserName")==null) {
+          <a class="nav-link nav-item" href="/Login">Login</a>
+          <a class="nav-link nav-item" href="/Register">Register</a>
         }
-        @RenderBody()
-    </div>
-        
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-2.2.0.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.js"
-                asp-fallback-test="window.jQuery">
-        </script>
-        
-        
-        <script src="~/js/site.js" asp-append-version="true"></script>
-
-    @RenderSection("scripts", required: false)
-</body>
+        else {
+          <a class="nav-link nav-item" href="/logout">Log Out</a> 
+        }
+      }
+    </nav>
+    @RenderBody()
+  </div>
+  </body>
 </html>

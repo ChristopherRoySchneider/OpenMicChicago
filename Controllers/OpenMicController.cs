@@ -71,7 +71,7 @@ namespace OpenMicChicago.Controllers {
             }
 
 
-            return View ("Home", openMics);
+            return View ("Home2", openMics);
         }
 
         [HttpGet]
@@ -164,7 +164,7 @@ namespace OpenMicChicago.Controllers {
             // if (openMics.Where (x => x.DateTime < openMic.EndDateTime && openMic.DateTime < x.EndDateTime && x.Likes.Where (r => r.UserID == HttpContext.Session.GetInt32 ("UserID")).Count () > 0).Count () > 0) {
             //     ViewBag.scheduleConflict = true;
             // } else {
-            //     ViewBag.scheduleConflict = false;
+                ViewBag.scheduleConflict = false;
             // }
 
             return View ("OpenMicById", openMic);

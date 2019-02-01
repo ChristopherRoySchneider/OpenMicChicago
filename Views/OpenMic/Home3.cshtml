@@ -1,0 +1,27 @@
+@using Microsoft.AspNetCore.Http
+@model IQueryable<OpenMicChicago.Models.OpenMic>
+
+@{
+    ViewData["Title"] = "Open Mic CHICAGO";
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://unpkg.com/imagesloaded@4/imagesloaded.pkgd.min.js"></script>
+<script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+
+<div class="grid">
+  @foreach (var OpenMic in @Model){
+    <div class="grid-item">
+      <img src="@OpenMic.PhotoURL" alt="@OpenMic.Title" />
+    </div>
+  }
+</div>
+
+<script>
+  $(".grid").imagesLoaded(function() {
+    $(".grid").masonry({
+      columnWidth: 200,
+      itemSelector: ".grid-item"
+    });
+  });
+</script>
