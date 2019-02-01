@@ -170,19 +170,12 @@ namespace OpenMicChicago.Controllers {
             var openMic = dbContext.OpenMics.Include (o => o.Genres).ThenInclude (omg => omg.Genre).Include (a => a.Likes).ThenInclude (r => r.User).Include (a => a.Creator).Include (o => o.Venue).FirstOrDefault (a => a.OpenMicID == openMicID);
             ViewBag.UnusedGenres = dbContext.Genres.Include (g => g.OpenMics).Where (g => g.OpenMics.All (omg => omg.OpenMicID != openMicID)).OrderBy (g => g.Name);
             var openMics = dbContext.OpenMics.Include (a => a.Likes).ThenInclude (r => r.User).Include (a => a.Creator).OrderBy (a => a.DateTime).Where (a => a.DateTime > DateTime.Now);
-<<<<<<< HEAD
-            // if (openMics.Where (x => x.DateTime < openMic.EndDateTime && openMic.DateTime < x.EndDateTime && x.Likes.Where (r => r.UserID == HttpContext.Session.GetInt32 ("UserID")).Count () > 0).Count () > 0) {
-            //     ViewBag.scheduleConflict = true;
-            // } else {
-                ViewBag.scheduleConflict = false;
-            // }
-=======
+
             if (openMics.Where (x => x.DateTime < openMic.EndDateTime && openMic.DateTime < x.EndDateTime && x.Likes.Where (r => r.UserID == HttpContext.Session.GetInt32 ("UserID")).Count () > 0).Count () > 0) {
                 ViewBag.scheduleConflict = true;
             } else {
                 ViewBag.scheduleConflict = false;
             }
->>>>>>> master
 
             return View ("OpenMicById", openMic);
         }
