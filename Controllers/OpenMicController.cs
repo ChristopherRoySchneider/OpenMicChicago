@@ -26,7 +26,7 @@ namespace OpenMicChicago.Controllers {
 
         [HttpGet]
         [Route ("Home")]
-        public IActionResult Home (string searchString, DateTime searchTime, int? searchGenre, string searchType, string searchAddress, int? searchDistance) {
+        public IActionResult Home (string searchString, DateTime searchTime, int? searchGenre, string searchType, string searchAddress, int? searchDistance, string searchFavorites, string searchMyOpenMics) {
 
             ViewBag.Genres = dbContext.Genres.Include (g => g.OpenMics).OrderBy (g => g.Name);
 
@@ -37,7 +37,7 @@ namespace OpenMicChicago.Controllers {
             }
             if (searchTime != DateTime.MinValue) {
                 ViewBag.searchTime = searchTime.ToString ("yyyy-MM-ddTHH:mm");
-                openMics = openMics.Where (o => o.DateTime < searchTime && o.EndDateTime > searchTime);
+                openMics = openMics.Where (o => o.DateTime <= searchTime && o.EndDateTime >= searchTime);
             }
             if (searchGenre.HasValue) {
                 ViewBag.searchGenre = searchGenre;
@@ -69,6 +69,15 @@ namespace OpenMicChicago.Controllers {
                     }
                 }
             }
+            if (!String.IsNullOrEmpty (searchFavorites)){
+                ViewBag.searchFavorites=searchFavorites;
+                openMics=openMics.Where(o=>o.Likes.Any(l=>l.UserID==HttpContext.Session.GetInt32 ("UserID")));
+            }
+            if (!String.IsNullOrEmpty (searchMyOpenMics)){
+                ViewBag.searchMyOpenMics=searchMyOpenMics;
+                openMics=openMics.Where(O=>O.Creator.UserID==HttpContext.Session.GetInt32 ("UserID"));
+            }
+
 
 
             return View ("Home", openMics);
@@ -161,11 +170,11 @@ namespace OpenMicChicago.Controllers {
             var openMic = dbContext.OpenMics.Include (o => o.Genres).ThenInclude (omg => omg.Genre).Include (a => a.Likes).ThenInclude (r => r.User).Include (a => a.Creator).Include (o => o.Venue).FirstOrDefault (a => a.OpenMicID == openMicID);
             ViewBag.UnusedGenres = dbContext.Genres.Include (g => g.OpenMics).Where (g => g.OpenMics.All (omg => omg.OpenMicID != openMicID)).OrderBy (g => g.Name);
             var openMics = dbContext.OpenMics.Include (a => a.Likes).ThenInclude (r => r.User).Include (a => a.Creator).OrderBy (a => a.DateTime).Where (a => a.DateTime > DateTime.Now);
-            // if (openMics.Where (x => x.DateTime < openMic.EndDateTime && openMic.DateTime < x.EndDateTime && x.Likes.Where (r => r.UserID == HttpContext.Session.GetInt32 ("UserID")).Count () > 0).Count () > 0) {
-            //     ViewBag.scheduleConflict = true;
-            // } else {
-            //     ViewBag.scheduleConflict = false;
-            // }
+            if (openMics.Where (x => x.DateTime < openMic.EndDateTime && openMic.DateTime < x.EndDateTime && x.Likes.Where (r => r.UserID == HttpContext.Session.GetInt32 ("UserID")).Count () > 0).Count () > 0) {
+                ViewBag.scheduleConflict = true;
+            } else {
+                ViewBag.scheduleConflict = false;
+            }
 
             return View ("OpenMicById", openMic);
         }

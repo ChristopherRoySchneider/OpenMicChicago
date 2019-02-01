@@ -61,16 +61,39 @@
         </table>
         
 
-        <a href="/OpenMic/new" class = "btn btn-primary">Add New OpenMic</a>
+        <a href="/OpenMic/new" class = "btn btn-primary mb-2">Add New OpenMic</a>
 
         <form action="/Home" method="get">
         <div class="form-group">
-            <label for="searchString">Search Text:</label>
-            <input class="form-control" name="searchString" value="@ViewBag.searchString">
+            
+            @{
+
+                if(@ViewBag.searchFavorites=="true"){
+                    <label for="searchFavorites">Favorites:</label>
+                    <input type="checkbox" id="searchFavorites" name="searchFavorites" value="true" checked="checked">
+                }
+                else{
+                    <label for="searchFavorites">Favorites:</label>
+                    <input type="checkbox" name="searchFavorites" value="true">
+                }
+                if(@ViewBag.searchMyOpenMics=="true"){
+                    <label for="searchMyOpenMics">My Open Mics:</label>
+                    <input type="checkbox" name="searchMyOpenMics" value="true" checked="checked">
+                }
+                else{
+                    <label for="searchMyOpenMics">My Open Mics:</label>
+                    <input type="checkbox" name="searchMyOpenMics" value="true">
+                }
+            }
+                
+            
+            
+           
         </div>
+        
         <div class="form-group">
             <label for="searchType">Type:</label>
-            <select name="searchType">
+            <select name="searchType" id="searchType">
                 <option value="">All</option>
                 @{
                     if(ViewBag.searchType=="Music"){
@@ -98,14 +121,19 @@
             </select>
         </div>
         <div class="form-group">
-            <label for="searchTime">Search Time:</label>
-            <input class="form-control" name="searchTime" type="datetime-local" value="@ViewBag.searchTime">
+            <label for="searchString">Search Text:</label>
+            <input class="form-control" name="searchString" id="searchString" value="@ViewBag.searchString">
         </div>
+        <div class="form-group">
+            <label for="searchTime">Search Time:</label>
+            <input class="form-control" name="searchTime" id="searchTime" type="datetime-local" value="@ViewBag.searchTime">
+        </div>
+        
 
         <div class="form-group">
                 
             <label for="searchGenre">Genre:</label>
-            <select name="searchGenre">
+            <select name="searchGenre" id="searchGenre">
                 <option value="">All</option>
                 @{
                     foreach (var genre in ViewBag.Genres)
@@ -124,12 +152,12 @@
 
         <div class="form-group">
             <label for="searchDistance">Distance (mi):</label>
-            <input class="form-control" name="searchDistance" type="number" min="1" step="1" value="@ViewBag.searchDistance">
+            <input class="form-control" name="searchDistance" id="searchDistance" type="number" min="1" step="1" value="@ViewBag.searchDistance">
         </div>
 
         <div class="form-group">
             <label for="searchAddress">From Address:</label>
-            <input class="form-control" name="searchAddress" value="@ViewBag.searchAddress">
+            <input class="form-control" name="searchAddress" id="searchAddress" value="@ViewBag.searchAddress">
         </div>
 
         <button  type="submit" class="btn btn-primary  mt-1 mb-3">Search</button>
